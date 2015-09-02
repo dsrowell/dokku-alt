@@ -21,6 +21,7 @@ hostnames_for_app "$APP"
 http_host() {
   [[ $# -le 1 ]] && return
 
+  UNQUALIFIED_HOST=`echo $@ | cut -d'.' -f1`
   DOKKU_LISTEN_IPV4="${DOKKU_LISTEN_IPV4:-*}"
   DOKKU_LISTEN_IPV6="${DOKKU_LISTEN_IPV6:-[::]}"
   SCHEME="$1"
@@ -35,6 +36,7 @@ EOF
   listen      $DOKKU_LISTEN_IPV6:443 ssl spdy;
   listen      $DOKKU_LISTEN_IPV4:443 ssl spdy;
   server_name $@;
+  server_name $UNQUALIFIED_HOST;
 
   keepalive_timeout   70;
   add_header Alternate-Protocol 443:npn-spdy/2;
@@ -68,6 +70,7 @@ EOF
   listen      $DOKKU_LISTEN_IPV6:80;
   listen      $DOKKU_LISTEN_IPV4:80;
   server_name $@;
+  server_name $UNQUALIFIED_HOST;
 
 EOF
   fi
