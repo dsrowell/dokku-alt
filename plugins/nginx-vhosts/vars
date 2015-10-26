@@ -28,7 +28,7 @@ function hostnames_for_app() {
 	if [[ "$APP" == *.* ]] && [[ "$SUBDOMAIN" == "$APP" ]]; then
 		hostname="${APP/\//-}"
 	else
-		hostname="${APP/\//-}.$VHOST"
+		hostname="${APP} ${APP/\//-}.$VHOST"
 	fi
 
 	hostnames="$hostname"
